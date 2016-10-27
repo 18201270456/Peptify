@@ -1,0 +1,9 @@
+name: peptify
+account: frapbotbeta
+server: shinyapps.io
+appId: 127277
+bundleId: 566174
+url: https://frapbotbeta.shinyapps.io/peptify/
+when: 1474632368.00615
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shiny)\nattach(\"myWorkspace.RData\")\nlibrary(KernSmooth)\n\nshinyServer(function(input, output, session) {\n  \n  inputData <- reactive({  \n      input$inputId\n  })\n  \n  inputBoxTrain <- reactive({  \n    input$train\n  })\n  \n  inputAA <- reactive({  \n    input$aa\n  })\n  \n  inputBG <- reactive({  \n    input$bg\n  })\n  \n  output$plot <- renderPlot({\n    #input1 = gsub(\" \",\"\",inputData()) \n    if(!is.null(inputData())) peptides = strsplit(inputData(), split = \" \") else peptides = \"\"\n    peptideClean = as.vector(toupper(peptides))\n    # cat(inputData()[1])\n    # cat(inputData()[2])\n    # cat(inputData())\n    # cat(inputBoxTrain()[1])\n    try(\n     peptify(peptideClean, showtrainingset=inputBoxTrain(),showaa=inputAA(), showbackground=inputBG(), showplot='true')\n    ,silent = TRUE\n    )\n  })\n  \n})\n\npeptify <- function(peptide, showplot='true', showtrainingset='true', showaa='false', showbackground='true') {\n  if(peptide == \"\"){\n   whitePlaceholder = TRUE\n  } else {\n    whitePlaceholder = FALSE\n    \n    limits=c(-1,1)\n    PREDICTED_SPLITTED = c()\n    PREDICTED_SPLITTED = strsplit(peptide,'')\n    PP1_PREDICTED=c()\n    PP2_PREDICTED=c()\n    CPP_PREDICTED=c()\n    \n    for (i in 1:length(PREDICTED_SPLITTED)) {\n      PP1_PREDICTED[i]=mean(DESC[PREDICTED_SPLITTED[[i]][],'PP1'])\n      PP2_PREDICTED[i]=mean(DESC[PREDICTED_SPLITTED[[i]][],'PP2'])\n    }\n    \n  }\n  \n  if (showplot) {\n      \n      plot(PP2_CPP, PP1_CPP,type='n', xlim=c(-1,1), ylim=c(-1,1), xlab=\"(Hydrophobicity)\", ylab=\"(Polarity)\")\n      \n      if (showbackground) {\n        xx=c(-1,-0.764, 0.41,-1)\n        yy=c(-1,-1, 1,1)\n        polygon(xx,yy,col=\"#F7DDDC\", border=NA)\n        \n        xx=c(-0.764,1, 1,0.41)\n        yy=c(-1,-1, 1,1)\n        polygon(xx,yy,col=\"#F5EAB3\", border=NA)\n        \n        xx=c(0,1, 1,0)\n        yy=c(-0.3,-0.3, 1,1)\n        polygon(xx,yy,col=\"#D7F2BD\", border=NA)\n        \n        xx=c(-0.47,1, 1,0.71)\n        yy=c(-1,-1, 1,1)\n        polygon(xx,yy,col=\"#D7F2BD\", border=NA)\n      }\n      \n      if (showtrainingset) {\n        points(PP2_DECOY[1:5000], PP1_DECOY[1:5000], col = densCols(PP2_DECOY[1:5000], PP1_DECOY[1:5000], nbin = 100, colramp=colorRampPalette(c(\"#e6b5b5\",\"#610a0a\"))), pch=20)\n        points(PP2_CPP, PP1_CPP, col='#247A0F', pch=20)\n      }\n      \n      if (showaa) {\n        text(DESC$PP2,DESC$PP1,DESC$AA1)\n      }\n  }\n\n  if(whitePlaceholder == FALSE){  \n    \n    for (i in 1:length(PREDICTED_SPLITTED)) {\n      if ((PP2_PREDICTED[i]*1.7 + 0.3)>PP1_PREDICTED[i]) {\n        CPP_PREDICTED[i]=0\n      } else {\n        CPP_PREDICTED[i]=-1\n      }\n      if ((PP2_PREDICTED[i]*1.7 - 0.2)>PP1_PREDICTED[i] | PP2_PREDICTED[i]>0) {\n        CPP_PREDICTED[i]=1\n      } \n    }\n    \n    points(PP2_PREDICTED, PP1_PREDICTED, col='red', pch=18, cex = 1.8)\n    \n    }\n}\n",
+    "created" : 1474536390077.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3661075931",
+    "id" : "55A7ED9E",
+    "lastKnownWriteTime" : 1474633264,
+    "last_content_update" : 1474633264144,
+    "path" : "~/peptify/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

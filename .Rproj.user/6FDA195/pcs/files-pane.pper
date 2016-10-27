@@ -1,0 +1,9 @@
+{
+    "path" : "~/peptify",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
